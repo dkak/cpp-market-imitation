@@ -11,7 +11,9 @@ void Graphics::showMenu(Market &market){
     while(true){
         int option;
         do{
-            cout << endl << endl << " **************** New Day in the Market **************** " << endl;
+            cout << endl << endl; 
+            cout << " **************** New Day in the Market **************** ";
+            cout << endl;
             cout << "Add order to market: " << endl;
             cout << "1. Add buyer" << endl;
             cout << "2. Add seller" << endl;
@@ -19,7 +21,11 @@ void Graphics::showMenu(Market &market){
             cin >> option;
         }while(option<1 || option>3);
 
-        if(option == 3 ) return;
+        if(option == 3 ){
+            this->showMatchings(market.getRemovedBuyOrders(),market.getRemovedSellOrders());
+            this->showMarket(market.getBuyOrders(),market.getSellOrders());
+            return;
+        }
     
         long price;
         int quantity;
@@ -45,13 +51,93 @@ void Graphics::showMenu(Market &market){
 
 void Graphics::showMarket(list<Order> buy_orders,list<Order> sell_orders){
     
-    cout << endl << endl << " ******************** Buyers ARE : ******************** " << endl;
-    for(Order buy_order:buy_orders){
-        cout << "ID : " << buy_order.getId() << " -- " << "Price : " << buy_order.getPrice() << " -- " << "Quantity : " << buy_order.getQuantity() << endl;
-    }
+    cout << endl << endl;
+    cout << " ************************** Buyers ************************** ";
+    cout << " | ";
+    cout << " ************************** Sellers ************************** ";
+    cout << endl;
 
-    cout << endl << " ******************** Sellers ARE : ******************** " << endl;
-    for(Order sell_order: sell_orders){
-        cout << "ID : " << sell_order.getId() << " -- " << "Price : " << sell_order.getPrice() << " -- " << "Quantity : " << sell_order.getQuantity() << endl;
+    if(buy_orders.size()<sell_orders.size()){
+        auto it_buy = buy_orders.begin();
+        auto it_sell = sell_orders.begin();
+
+        for(int i=0; i<buy_orders.size(); i++){
+            std::advance(it_buy, i);
+            std::advance(it_sell, i);
+            Order buy_order=*it_buy;
+            Order sell_order=*it_sell;
+            cout << "ID : " << buy_order.getId() << " -- ";
+            cout << "Price: " << buy_order.getPrice() << " -- ";
+            cout << "Quantity: " << buy_order.getQuantity();
+            cout << "         |";
+            cout << "ID : " << sell_order.getId() << " -- ";
+            cout << "Price: " << sell_order.getPrice() << " -- ";
+            cout << "Quantity: " << sell_order.getQuantity();
+            cout << endl;
+        }
+
+        for(int i=buy_orders.size(); i<sell_orders.size(); i++){
+            std::advance(it_sell, i);
+            Order sell_order=*it_sell;
+            cout << "                         ";
+            cout << "                                     | ";
+            cout << "ID : " << sell_order.getId() << " -- ";
+            cout << "Price: " << sell_order.getPrice() << " -- ";
+            cout << "Quantity: " << sell_order.getQuantity();
+            cout << endl;
+        }
     }
+    else if(buy_orders.size()>sell_orders.size()){
+        auto it_buy = buy_orders.begin();
+        auto it_sell = sell_orders.begin();
+
+        for(int i=0; i<sell_orders.size(); i++){
+            std::advance(it_buy, i);
+            std::advance(it_sell, i);
+            Order buy_order=*it_buy;
+            Order sell_order=*it_sell;
+            cout << "ID : " << buy_order.getId() << " -- ";
+            cout << "Price: " << buy_order.getPrice() << " -- ";
+            cout << "Quantity: " << buy_order.getQuantity();
+            cout << "         |";
+            cout << "ID : " << sell_order.getId() << " -- ";
+            cout << "Price: " << sell_order.getPrice() << " -- ";
+            cout << "Quantity: " << sell_order.getQuantity();
+            cout << endl;
+        }
+
+        for(int i=sell_orders.size(); i<buy_orders.size(); i++){
+            std::advance(it_buy, i);
+            Order buy_order=*it_buy;
+            cout << "ID : " << buy_order.getId() << " -- ";
+            cout << "Price: " << buy_order.getPrice() << " -- ";
+            cout << "Quantity: " << buy_order.getQuantity();
+            cout << " | ";
+            cout << endl;
+        }
+    }
+    else{
+        auto it_buy = buy_orders.begin();
+        auto it_sell = sell_orders.begin();
+
+        for(int i=0; i<buy_orders.size(); i++){
+            std::advance(it_buy, i);
+            std::advance(it_sell, i);
+            Order buy_order=*it_buy;
+            Order sell_order=*it_sell;
+            cout << "ID : " << buy_order.getId() << " -- ";
+            cout << "Price: " << buy_order.getPrice() << " -- ";
+            cout << "Quantity: " << buy_order.getQuantity();
+            cout << "         |";
+            cout << "ID : " << sell_order.getId() << " -- ";
+            cout << "Price: " << sell_order.getPrice() << " -- ";
+            cout << "Quantity: " << sell_order.getQuantity();
+            cout << endl;
+        }
+    }
+}
+
+void Graphics::showMatchings(list<Order> removedBuyOrders,list<Order> removedSellOrders){
+    
+    cout << " YOYOYOYo";
 }

@@ -11,9 +11,9 @@ class Order{
         OrderType side;
     public:
         Order(int id,double price,int quantity,OrderType side);
+        Order()=default;
         int getId();
         double getPrice();
-        void setPrice(long price);
         int getQuantity();
         void setQuantity(int quantity);
         OrderType getSide();

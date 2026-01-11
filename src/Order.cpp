@@ -15,10 +15,6 @@ double Order::getPrice(){
     return this->price;    
 }
 
-void Order::setPrice(long price){
-    this->price=price;
-}
-
 int Order::getQuantity(){
     return this->quantity;    
 }
