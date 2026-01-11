@@ -5,8 +5,6 @@
 #include "OrderMatch.h"
 
 #include <list>
-#include <map>
-
 class Market{
 
     private:
@@ -16,7 +14,7 @@ class Market{
     public:
         std::list<Order> getBuyOrders();
         std::list<Order> getSellOrders();
-        std::list<OrderMatch> Market::getMatchedOrders();
+        std::list<OrderMatch> getMatchedOrders();
         int getBuyOrdersSize();
         int getSellOrdersSize();
 
