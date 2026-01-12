@@ -6,9 +6,9 @@
 
 void Market::addOrder(Order &order){
     if(order.getSide()==OrderType::Buy){      
-        if(!findBuyOrder(order)) this->buy_orders.push_back(order);
+        if(!findOrder(order,sell_orders)) this->buy_orders.push_back(order);
     }else if(order.getSide()==OrderType::Sell){
-        if(!findSellOrder(order)) this->sell_orders.push_back(order);
+        if(!findOrder(order,buy_orders)) this->sell_orders.push_back(order);
     }else{
         std::cout << "Invalid order! It is skipped." << std::endl;
     }
@@ -18,82 +18,59 @@ void Market::addMatchedOrder(OrderMatch matched_order){
     this->matched_orders.push_back(matched_order);
 }
 
-void Market::removeBuyOrder(Order buy_order){
-    this->buy_orders.remove(buy_order);
-}
-
-void Market::removeSellOrder(Order sell_order){
-    this->sell_orders.remove(sell_order);
-}
-
-bool Market::findBuyOrder(Order &buy_order){
-    for(Order &sell_order: sell_orders){
-        if(sell_order.getPrice()<=buy_order.getPrice()){
-
-            if(sell_order.getQuantity()>buy_order.getQuantity()){
-                sell_order.setQuantity( 
-                    sell_order.getQuantity() - buy_order.getQuantity()
-                );
-                OrderMatch matched_order(buy_order,sell_order,true,false);
-                addMatchedOrder(matched_order);
-                return true;
-            }
-            else if(sell_order.getQuantity()<buy_order.getQuantity()){
-                buy_order.setQuantity( 
-                    buy_order.getQuantity() - sell_order.getQuantity()
-                );
-                OrderMatch matched_order(buy_order,sell_order,false,true);
-                addMatchedOrder(matched_order);
-                removeSellOrder(sell_order);
-            }
-            else{
-                OrderMatch matched_order(buy_order,sell_order,true,true);
-                addMatchedOrder(matched_order);
-                removeSellOrder(sell_order);
-                return true;
-            }
-        }
+void Market::removeOrder(Order order){
+    if(order.getSide()==OrderType::Buy){
+        this->buy_orders.remove(order);
     }
-    if(buy_order.getQuantity()>0) return false;
-    return true;
+    else{
+        this->sell_orders.remove(order);
+    }
 }
 
-bool Market::findSellOrder(Order &sell_order){
+bool Market::findOrder(Order &order,std::list<Order> &pair_orders){
 
-    // auto start = std::chrono::high_resolution_clock::now();             // Start timer
-    
-    for(Order &buy_order: buy_orders){
-        if(sell_order.getPrice()<=buy_order.getPrice()){
-
-            // auto end = std::chrono::high_resolution_clock::now();       // Stop timer
+    // auto start = std::chrono::high_resolution_clock::now(); // Start timer
+    for(Order &pair_order: pair_orders){
+        if(
+            (
+                order.getSide() == OrderType::Buy && 
+                order.getPrice() >= pair_order.getPrice()
+            ) 
+            || 
+            (
+                order.getSide() == OrderType::Sell && 
+                order.getPrice() <= pair_order.getPrice()
+            )
+        )
+        {
+            // auto end = std::chrono::high_resolution_clock::now(); // Stop timer
             // auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
             // std::cout << "Time taken: " << duration.count() << " microseconds" << std::endl;
-            
-            if(buy_order.getQuantity()>sell_order.getQuantity()){
-                buy_order.setQuantity( 
-                    buy_order.getQuantity() - sell_order.getQuantity()
+            if(order.getQuantity() < pair_order.getQuantity()){
+                pair_order.setQuantity( 
+                    pair_order.getQuantity() - order.getQuantity()
                 );
-                OrderMatch matched_order(buy_order,sell_order,false,true);
+                OrderMatch matched_order(order,pair_order,true,false);
                 addMatchedOrder(matched_order);
                 return true;
             }
-            else if(buy_order.getQuantity()<sell_order.getQuantity()){
-                sell_order.setQuantity( 
-                    sell_order.getQuantity() - buy_order.getQuantity()
+            else if(order.getQuantity() > pair_order.getQuantity()){
+                order.setQuantity(
+                    order.getQuantity() - pair_order.getQuantity()
                 );
-                OrderMatch matched_order(buy_order,sell_order,true,false);
+                OrderMatch matched_order(order,pair_order,false,true);
                 addMatchedOrder(matched_order);
-                removeBuyOrder(buy_order);
+                removeOrder(pair_order);
             }
             else{
-                OrderMatch matched_order(buy_order,sell_order,true,true);
+                OrderMatch matched_order(order,pair_order,true,true);
                 addMatchedOrder(matched_order);
-                removeBuyOrder(buy_order);
+                removeOrder(pair_order);
                 return true;
             }
         }
     }
-    if(sell_order.getQuantity()>0) return false;
+    if(order.getQuantity()>0) return false;
     return true;
 }
 

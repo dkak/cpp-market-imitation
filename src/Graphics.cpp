@@ -24,6 +24,7 @@ void Graphics::showMenu(Market &market){
         if(option == 3 ){
             this->showMatchings(market.getMatchedOrders());
             this->showMarket(market.getBuyOrders(),market.getSellOrders());
+            cin >> option;
             return;
         }
     
@@ -69,7 +70,7 @@ void Graphics::showMarket(list<Order> buy_orders,list<Order> sell_orders){
             cout << "ID : " << buy_order.getId() << " -- ";
             cout << "Price: " << buy_order.getPrice() << " -- ";
             cout << "Quantity: " << buy_order.getQuantity();
-            cout << "            |";
+            cout << "            ";
             cout << "ID : " << sell_order.getId() << " -- ";
             cout << "Price: " << sell_order.getPrice() << " -- ";
             cout << "Quantity: " << sell_order.getQuantity();
@@ -80,7 +81,7 @@ void Graphics::showMarket(list<Order> buy_orders,list<Order> sell_orders){
             std::advance(it_sell, i);
             Order sell_order=*it_sell;
             cout << "                         ";
-            cout << "                                     | ";
+            cout << "                                      ";
             cout << "ID : " << sell_order.getId() << " -- ";
             cout << "Price: " << sell_order.getPrice() << " -- ";
             cout << "Quantity: " << sell_order.getQuantity();
@@ -99,7 +100,7 @@ void Graphics::showMarket(list<Order> buy_orders,list<Order> sell_orders){
             cout << "ID : " << buy_order.getId() << " -- ";
             cout << "Price: " << buy_order.getPrice() << " -- ";
             cout << "Quantity: " << buy_order.getQuantity();
-            cout << "         |";
+            cout << "         ";
             cout << "ID : " << sell_order.getId() << " -- ";
             cout << "Price: " << sell_order.getPrice() << " -- ";
             cout << "Quantity: " << sell_order.getQuantity();
@@ -112,7 +113,7 @@ void Graphics::showMarket(list<Order> buy_orders,list<Order> sell_orders){
             cout << "ID : " << buy_order.getId() << " -- ";
             cout << "Price: " << buy_order.getPrice() << " -- ";
             cout << "Quantity: " << buy_order.getQuantity();
-            cout << " | ";
+            cout << "  ";
             cout << endl;
         }
     }
@@ -128,7 +129,7 @@ void Graphics::showMarket(list<Order> buy_orders,list<Order> sell_orders){
             cout << "ID : " << buy_order.getId() << " -- ";
             cout << "Price: " << buy_order.getPrice() << " -- ";
             cout << "Quantity: " << buy_order.getQuantity();
-            cout << "         |";
+            cout << "         ";
             cout << "ID : " << sell_order.getId() << " -- ";
             cout << "Price: " << sell_order.getPrice() << " -- ";
             cout << "Quantity: " << sell_order.getQuantity();
@@ -140,18 +141,22 @@ void Graphics::showMarket(list<Order> buy_orders,list<Order> sell_orders){
 void Graphics::showMatchings(list<OrderMatch> matched_orders){
     
     for(OrderMatch matched_order:matched_orders){
+        Order buyer_order = matched_order.getFirstOrder().getSide() == OrderType::Buy ? matched_order.getFirstOrder() : matched_order.getSecondOrder();
+        Order seller_order = matched_order.getFirstOrder().getSide() == OrderType::Sell ? matched_order.getFirstOrder() : matched_order.getSecondOrder();
         cout << "********** Order Matches **********" << endl;
-        cout << "Buyer ID: " << matched_order.getBuyOrder().getId();
+        cout << "Buyer ID: " << buyer_order.getId();
         cout << " -- ";
-        cout << "Price: " << matched_order.getBuyOrder().getPrice();
+        cout << "Price: " << buyer_order.getPrice();
         cout << " -- ";
-        cout << "Quantity: " << matched_order.getBuyOrder().getQuantity();
-        cout << " *** Seller *** " << endl;
-        cout << "Seller ID: " << matched_order.getSellOrder().getId();
-        cout << " -- ";
-        cout << "Price: " << matched_order.getSellOrder().getPrice();
-        cout << " -- ";
-        cout << "Quantity: " << matched_order.getSellOrder().getQuantity();
+        cout << "Quantity: " << buyer_order.getQuantity();
         cout << endl;
+        cout << "Seller ID: " << seller_order.getId();
+        cout << " -- ";
+        cout << "Price: " << seller_order.getPrice();
+        cout << " -- ";
+        cout << "Quantity: " << seller_order.getQuantity();
+        cout << endl;
+        cout << endl;
+        cout << "Next pair is" << endl;
     }
 }

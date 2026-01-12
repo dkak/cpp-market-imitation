@@ -6,21 +6,21 @@
 class OrderMatch{
 
     private:
-        Order buy_order;
-        Order sell_order;
-        bool fulfilled_buy_order;
-        bool fulfilled_sell_order;
+        Order first_order;
+        Order second_order;
+        bool fulfilled_first_order;
+        bool fulfilled_second_order;
     public:
         OrderMatch(
-            Order buy_order, 
-            Order sell_order, 
-            bool fulfilled_buy_order, 
-            bool fulfilled_sell_order
+            Order first_order, 
+            Order second_order, 
+            bool fulfilled_first_order, 
+            bool fulfilled_second_order
         );
-        Order getBuyOrder();
-        Order getSellOrder();
-        bool getFulfilledBuyOrder();
-        bool getFulfilledSellOrder();
+        Order getFirstOrder();
+        Order getSecondOrder();
+        bool getFulfilledFirstOrder();
+        bool getFulfilledSecondOrder();
 };
 
 #endif

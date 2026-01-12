@@ -19,11 +19,9 @@ class Market{
         int getSellOrdersSize();
 
         void addOrder(Order &order);
+        void removeOrder(Order buy_order);
+        bool findOrder(Order &order,std::list<Order> &pair_orders);
         void addMatchedOrder(OrderMatch matched_order);
-        void removeBuyOrder(Order buy_order);
-        void removeSellOrder(Order sell_order);
-        bool findBuyOrder(Order &sell_order);
-        bool findSellOrder(Order &buy_order);
 };
 
 #endif

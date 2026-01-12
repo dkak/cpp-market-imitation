@@ -1,30 +1,30 @@
 #include "OrderMatch.h"
 
 OrderMatch::OrderMatch(
-    Order buy_order, 
-    Order sell_order, 
-    bool fulfilled_buy_order, 
-    bool fulfilled_sell_order
+    Order first_order, 
+    Order second_order, 
+    bool fulfilled_first_order, 
+    bool fulfilled_second_order
 )
 {
-    this->buy_order=buy_order;
-    this->sell_order=sell_order;
-    this->fulfilled_buy_order=fulfilled_buy_order;
-    this->fulfilled_sell_order=fulfilled_sell_order;
+    this->first_order=first_order;
+    this->second_order=second_order;
+    this->fulfilled_first_order=fulfilled_first_order;
+    this->fulfilled_second_order=fulfilled_second_order;
 }
 
-Order OrderMatch::getBuyOrder(){
-    return this->buy_order;
+Order OrderMatch::getFirstOrder(){
+    return this->first_order;
 }
 
-Order OrderMatch::getSellOrder(){
-    return this->sell_order;
+Order OrderMatch::getSecondOrder(){
+    return this->second_order;
 }
 
-bool OrderMatch::getFulfilledBuyOrder(){
-    return this->fulfilled_buy_order;
+bool OrderMatch::getFulfilledFirstOrder(){
+    return this->fulfilled_first_order;
 }
 
-bool OrderMatch::getFulfilledSellOrder(){
-    return this->fulfilled_sell_order;
+bool OrderMatch::getFulfilledSecondOrder(){
+    return this->fulfilled_second_order;
 }
