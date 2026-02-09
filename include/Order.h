@@ -17,6 +17,7 @@ class Order{
         double getPrice();
         int getQuantity();
         void setQuantity(int quantity);
+        void reduceQuantity(int quantity);
         OrderType getSide();
 
         bool operator==(const Order& order) const {

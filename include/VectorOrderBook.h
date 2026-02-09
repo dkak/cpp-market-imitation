@@ -1,16 +1,15 @@
-#ifndef LISTORDERBOOK_H
-#define LISTORDERBOOK_H
+#ifndef VECTORORDERBOOK_H
+#define VECTORORDERBOOK_H
 
 #include "IOrderBook.h"
 
-#include <list>
-#include <optional>
+#include <vector>
 
-class ListOrderBook : public IOrderBook{
+class VectorOrderBook : public IOrderBook{
     private:
-        std::list<Order> buy_orders;
-        std::list<Order> sell_orders;
-
+        std::vector<Order> buy_orders;
+        std::vector<Order> sell_orders;
+    
     public:
         int getOrdersSize();
         void addOrder(Order order);

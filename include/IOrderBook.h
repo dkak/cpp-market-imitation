@@ -3,6 +3,8 @@
 
 #include "Order.h"
 
+#include <optional>
+
 class IOrderBook{
 
     public:
@@ -10,11 +12,13 @@ class IOrderBook{
         virtual ~IOrderBook()=default;
         
         // Pure virtual functions
+        virtual int getOrdersSize()=0;
+
         virtual void addOrder(Order order)=0;
 
         virtual void removeOrder(Order order)=0;
         
-        virtual Order getMatchedOrder(Order order) = 0;
+        virtual Order* getBestMatch(Order &order) = 0;
 };
 
 #endif

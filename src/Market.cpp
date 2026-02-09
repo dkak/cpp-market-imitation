@@ -6,16 +6,38 @@
 #include <iostream>
 
 Market::Market(std::unique_ptr<IOrderBook> order_book){
-    this->order_book=order_book;
+    this->order_book=std::move(order_book);
 }
 
-void Market::processIncomingOrder(const Order order){
-    Order pair_order=order_book->getMatchedOrder(order);
-    if(pair_order==NULL){
-        
-    }
+int Market::getOrdersSize(){
+    return this->order_book->getOrdersSize();
+}
+
+std::list<OrderMatch> Market::getMatchedOrders(){
+    return this->matched_orders;
 }
 
 void Market::addMatchedOrder(OrderMatch matched_order){
     this->matched_orders.push_back(matched_order);
+}
+
+void Market::processIncomingOrder(Order &order){
+    
+    while(order.getQuantity()>0){
+        Order* resting_order=order_book->getBestMatch(order);
+        if(resting_order==nullptr) break;
+        this->completeTransaction(order,*resting_order);
+    }
+
+    if(order.getQuantity()>0) this->order_book->addOrder(order);
+}
+
+void Market::completeTransaction(Order &incoming_order,Order &resting_order){
+
+    int traded_quantity=std::min(incoming_order.getQuantity(),resting_order.getQuantity());
+    incoming_order.reduceQuantity(traded_quantity);
+    resting_order.reduceQuantity(traded_quantity);
+
+    OrderMatch order_match(incoming_order,resting_order,traded_quantity);
+    if(resting_order.getQuantity()==0) order_book->removeOrder(resting_order);
 }

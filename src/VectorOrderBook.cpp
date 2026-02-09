@@ -1,14 +1,14 @@
-#include "ListOrderBook.h"
+#include "VectorOrderBook.h"
 #include "OrderMatch.h"
 
-#include <list>
-#include <optional>
+#include <vector>
+#include <algorithm>
 
-int ListOrderBook::getOrdersSize(){
+int VectorOrderBook::getOrdersSize(){
     return this->buy_orders.size()+this->sell_orders.size();
 }
 
-void ListOrderBook::addOrder(Order order){
+void VectorOrderBook::addOrder(Order order){
     if(order.getSide()==OrderType::Buy){
         this->buy_orders.push_back(order);
     }else{
@@ -16,18 +16,28 @@ void ListOrderBook::addOrder(Order order){
     }
 }
 
-void ListOrderBook::removeOrder(Order order){
+void VectorOrderBook::removeOrder(Order order){
+    
+    // We use a pointer here. NO orders are copied!
+    std::vector<Order>* same_type_orders;
     if(order.getSide()==OrderType::Buy){
-        this->buy_orders.remove(order);
-    }else{
-        this->buy_orders.remove(order);
+        same_type_orders=&this->buy_orders;
+    }
+    else{
+        same_type_orders=&this->sell_orders;
+    }
+    auto it = std::find(same_type_orders->begin(), same_type_orders->end(),order);
+    if(it != same_type_orders->end()) {
+        // The "Swap and Pop" Trick (The Efficiency Pro-Move)
+        std::swap(*it , same_type_orders->back());
+        same_type_orders->pop_back();
     }
 }
         
-Order* ListOrderBook::getBestMatch(Order &order){
+Order* VectorOrderBook::getBestMatch(Order &order){
     
     // We use a pointer here. NO orders are copied!
-    std::list<Order>* pair_orders;
+    std::vector<Order>* pair_orders;
     if(order.getSide()==OrderType::Buy){
         pair_orders=&this->sell_orders;
     }

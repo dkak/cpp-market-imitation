@@ -1,30 +1,24 @@
 #include "OrderMatch.h"
 
 OrderMatch::OrderMatch(
-    Order first_order, 
-    Order second_order, 
-    bool fulfilled_first_order, 
-    bool fulfilled_second_order
+    Order incoming_order, 
+    Order resting_order, 
+    int traded_quantity
 )
 {
-    this->first_order=first_order;
-    this->second_order=second_order;
-    this->fulfilled_first_order=fulfilled_first_order;
-    this->fulfilled_second_order=fulfilled_second_order;
+    this->incoming_order=incoming_order;
+    this->resting_order=resting_order;
+    this->traded_quantity=traded_quantity;
 }
 
-Order OrderMatch::getFirstOrder(){
-    return this->first_order;
+Order OrderMatch::getIncomingOrder(){
+    return this->incoming_order;
 }
 
-Order OrderMatch::getSecondOrder(){
-    return this->second_order;
+Order OrderMatch::getRestingOrder(){
+    return this->resting_order;
 }
 
-bool OrderMatch::getFulfilledFirstOrder(){
-    return this->fulfilled_first_order;
-}
-
-bool OrderMatch::getFulfilledSecondOrder(){
-    return this->fulfilled_second_order;
+int OrderMatch::getTradedQuantity(){
+    return this->traded_quantity;
 }

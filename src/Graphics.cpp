@@ -23,7 +23,7 @@ void Graphics::showMenu(Market &market){
 
         if(option == 3 ){
             this->showMatchings(market.getMatchedOrders());
-            this->showMarket(market.getBuyOrders(),market.getSellOrders());
+            this->showMarket(market.getOrderBook());
             cin >> option;
             return;
         }
@@ -35,7 +35,7 @@ void Graphics::showMenu(Market &market){
         cout << "Give the quantity: ";
         cin >> quantity;
 
-        int id=market.getBuyOrdersSize() + market.getSellOrdersSize();
+        int id=market.getOrdersSize();
 
         OrderType order_type;
         if(option == 1){
@@ -45,19 +45,13 @@ void Graphics::showMenu(Market &market){
         }
 
         Order new_order(id,price,quantity,order_type);
-        market.addOrder(new_order);
-        showMarket(market.getBuyOrders(),market.getSellOrders());
+        market.processIncomingOrder(new_order);
+        showMarket(market.getOrders());
     }
 }
 
 void Graphics::showMarket(list<Order> buy_orders,list<Order> sell_orders){
     
-    cout << endl << endl;
-    cout << " ************* Buyers ************* ";
-    cout << " | ";
-    cout << " ************* Sellers ************* ";
-    cout << endl;
-
     if(buy_orders.size()<sell_orders.size()){
         auto it_buy = buy_orders.begin();
         auto it_sell = sell_orders.begin();

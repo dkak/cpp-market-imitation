@@ -16,8 +16,13 @@ class Market{
 
     public:
         Market(std::unique_ptr<IOrderBook> order_book);
-        void processIncomingOrder(const Order order);
+        
+        int getOrdersSize();
+        std::unique_ptr<IOrderBook> Market::getOrderBook();
+        void processIncomingOrder(Order &order);
         void addMatchedOrder(OrderMatch matched_order);
+        void completeTransaction(Order &incoming_order,Order &resting_order);
+        std::list<OrderMatch> getMatchedOrders();
 };
 
 #endif
