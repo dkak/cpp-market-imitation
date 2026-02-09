@@ -5,14 +5,14 @@
 #include "Order.h"
 #include "OrderMatch.h"
 
-#include <list>
+#include <unordered_map>
 #include <memory>
 
 class Market{
 
     private:
         std::unique_ptr<IOrderBook> order_book;
-        std::list<OrderMatch> matched_orders;
+        std::unordered_map<int,OrderMatch> matched_orders;
 
     public:
         Market(std::unique_ptr<IOrderBook> order_book);
@@ -22,7 +22,7 @@ class Market{
         void processIncomingOrder(Order &order);
         void addMatchedOrder(OrderMatch matched_order);
         void completeTransaction(Order &incoming_order,Order &resting_order);
-        std::list<OrderMatch> getMatchedOrders();
+        std::unordered_map<int,OrderMatch> getMatchedOrders();
 };
 
 #endif

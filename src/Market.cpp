@@ -13,12 +13,12 @@ int Market::getOrdersSize(){
     return this->order_book->getOrdersSize();
 }
 
-std::list<OrderMatch> Market::getMatchedOrders(){
+std::unordered_map<int,OrderMatch> Market::getMatchedOrders(){
     return this->matched_orders;
 }
 
 void Market::addMatchedOrder(OrderMatch matched_order){
-    this->matched_orders.push_back(matched_order);
+    this->matched_orders.emplace(matched_order.getId(),matched_order);
 }
 
 void Market::processIncomingOrder(Order &order){
@@ -38,6 +38,6 @@ void Market::completeTransaction(Order &incoming_order,Order &resting_order){
     incoming_order.reduceQuantity(traded_quantity);
     resting_order.reduceQuantity(traded_quantity);
 
-    OrderMatch order_match(incoming_order,resting_order,traded_quantity);
+    OrderMatch order_match(static_cast<int>(this->matched_orders.size())+1,incoming_order,resting_order,traded_quantity);
     if(resting_order.getQuantity()==0) order_book->removeOrder(resting_order);
 }
