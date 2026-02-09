@@ -4,6 +4,7 @@
 
 #include <chrono>
 #include <iostream>
+#include <list>
 
 Market::Market(std::unique_ptr<IOrderBook> order_book){
     this->order_book=std::move(order_book);
@@ -38,6 +39,8 @@ void Market::completeTransaction(Order &incoming_order,Order &resting_order){
     incoming_order.reduceQuantity(traded_quantity);
     resting_order.reduceQuantity(traded_quantity);
 
-    OrderMatch order_match(static_cast<int>(this->matched_orders.size())+1,incoming_order,resting_order,traded_quantity);
+    OrderMatch order_match((static_cast<int>(this->matched_orders.size()))+1,incoming_order,resting_order,traded_quantity);
+    this->addMatchedOrder(order_match);
+
     if(resting_order.getQuantity()==0) order_book->removeOrder(resting_order);
 }

@@ -20,7 +20,7 @@ void ListOrderBook::removeOrder(Order order){
     if(order.getSide()==OrderType::Buy){
         this->buy_orders.remove(order);
     }else{
-        this->buy_orders.remove(order);
+        this->sell_orders.remove(order);
     }
 }
         

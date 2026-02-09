@@ -1,19 +1,20 @@
-#ifndef GRAPHICS_H
-#define GRAPHICS_H
+// #ifndef GRAPHICS_H
+// #define GRAPHICS_H
 
-#include "Market.h"
-#include "Order.h"
+// #include "Market.h"
+// #include "Order.h"
 
-#include <iostream>
+// #include <iostream>
+// #include <list>
 
-using namespace std;
+// using namespace std;
 
-class Graphics{
+// class Graphics{
 
-    public:
-        void showMenu(Market &market);
-        void showMarket(list<Order> buy_orders,list<Order> sell_orders);
-        void showMatchings(list<OrderMatch> matched_orders);
-};
+//     public:
+//         void showMenu(Market &market);
+//         void showMarket(list<Order> buy_orders,list<Order> sell_orders);
+//         void showMatchings(list<OrderMatch> matched_orders);
+// };
 
-#endif
+// #endif

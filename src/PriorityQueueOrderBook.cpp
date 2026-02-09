@@ -28,7 +28,7 @@ Order* PriorityQueueOrderBook::getBestMatch(Order &order){
     if(order.getSide()==OrderType::Buy){
         if (sell_orders.empty()) return nullptr;
 
-        Order& pair_order = sell_orders.top();
+        Order& pair_order = const_cast<Order&>(sell_orders.top());
         if (order.getPrice() >= pair_order.getPrice()) {
             return &pair_order;
         }
@@ -36,7 +36,7 @@ Order* PriorityQueueOrderBook::getBestMatch(Order &order){
     else{
         if (buy_orders.empty()) return nullptr;
 
-        Order& pair_order = buy_orders.top();
+        Order& pair_order = const_cast<Order&>(buy_orders.top());
         if (order.getPrice() <= pair_order.getPrice()) {
             return &pair_order;
         }

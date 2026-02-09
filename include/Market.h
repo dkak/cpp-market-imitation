@@ -18,7 +18,7 @@ class Market{
         Market(std::unique_ptr<IOrderBook> order_book);
         
         int getOrdersSize();
-        std::unique_ptr<IOrderBook> Market::getOrderBook();
+        std::unique_ptr<IOrderBook> getOrderBook();
         void processIncomingOrder(Order &order);
         void addMatchedOrder(OrderMatch matched_order);
         void completeTransaction(Order &incoming_order,Order &resting_order);

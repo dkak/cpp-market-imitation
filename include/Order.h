@@ -6,7 +6,7 @@ enum class OrderType {Buy,Sell};
 class Order{
     private:
         int id;
-        long price;
+        double price;
         int quantity;
         OrderType side;
     public:

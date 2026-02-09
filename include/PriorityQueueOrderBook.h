@@ -4,7 +4,7 @@
 #include "IOrderBook.h"
 
 #include <queue>
-
+#include <vector>
 
 struct CompareBuy {
     bool operator()(Order a,Order b) const {
@@ -22,8 +22,8 @@ struct CompareSell {
 
 class PriorityQueueOrderBook : public IOrderBook{
     private:
-        std::priority_queue<double,Order,CompareBuy> buy_orders;
-        std::priority_queue<double,Order,CompareSell> sell_orders;
+        std::priority_queue<Order,std::vector<Order>,CompareBuy> buy_orders;
+        std::priority_queue<Order,std::vector<Order>,CompareSell> sell_orders;
     
     public:
         int getOrdersSize();
