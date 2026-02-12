@@ -4,9 +4,8 @@
 #include "include/ListOrderBook.h"
 #include "include/VectorOrderBook.h"
 #include "include/MultimapOrderBook.h"
-// #include "include/PriorityQueueOrderBook.h"
+#include "include/RealWorldBook.h"
 
-#include <iostream>
 #include <iostream>
 #include <vector>
 #include <chrono>
@@ -42,7 +41,8 @@ void runBenchmark(std::string name, std::unique_ptr<IOrderBook> book, const std:
 }
 
 int main() {
-    const int ORDER_COUNT = 1000;
+
+    const int ORDER_COUNT = 10000;
     auto testData = generateOrders(ORDER_COUNT);
 
     std::cout << "--- Starting OrderBook Benchmarks (" << ORDER_COUNT << " orders) ---" << std::endl;
@@ -50,7 +50,7 @@ int main() {
     runBenchmark("Vector Implementation", std::make_unique<VectorOrderBook>(), testData);
     runBenchmark("List Implementation", std::make_unique<ListOrderBook>(), testData);
     runBenchmark("Multimap Implementation", std::make_unique<MultimapOrderBook>(), testData);
-    // runBenchmark("Priority Queue Implementation", std::make_unique<PriorityQueueOrderBook>, testData);
+    runBenchmark("RealWorld Implementation", std::make_unique<RealWorldBook>(), testData);
 
     std::cout << "\nPress Enter to exit..." << std::endl;
     std::cin.get(); // Waits for a key press
