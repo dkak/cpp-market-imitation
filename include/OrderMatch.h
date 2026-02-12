@@ -13,8 +13,8 @@ class OrderMatch{
     public:
         OrderMatch(
             int id,
-            Order& incoming_order, 
-            Order& resting_order, 
+            Order incoming_order, 
+            Order resting_order, 
             int traded_quantity
         );
         int getId();

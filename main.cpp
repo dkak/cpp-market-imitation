@@ -2,49 +2,57 @@
 #include "include/Market.h"
 #include "include/IOrderBook.h"
 #include "include/ListOrderBook.h"
+#include "include/VectorOrderBook.h"
+#include "include/MultimapOrderBook.h"
+// #include "include/PriorityQueueOrderBook.h"
 
 #include <iostream>
+#include <iostream>
+#include <vector>
+#include <chrono>
+#include <memory>
 
-int main(){
-
-    // 1. Setup the Market with a ListOrderBook
-    auto book = std::make_unique<ListOrderBook>();
-    Market market(std::move(book));
-
-    std::cout << "--- Starting Order Book Test ---\n";
-
-    // 2. Create some resting Sell orders (the "Book")
-    // We want to see if a Buyer can match these
-    Order sell1(101, 100.0, 50, OrderType::Sell);
-    Order sell2(102, 105.0, 40, OrderType::Sell);
-    
-    market.processIncomingOrder(sell1);
-    market.processIncomingOrder(sell2);
-    
-    std::cout << "Initial Book Size (Sells): " << market.getOrdersSize() << std::endl;
-
-    // 3. Create an incoming Buy order that should match
-    // Price 102.0 means it should fully clear sell1 (at 100) 
-    // and partially clear sell2 (at 105 is too high, so it should stop)
-    // Actually, let's set price to 105.0 to match both.
-    Order buy1(201, 105.0, 60, OrderType::Buy);
-    
-    std::cout << "\nProcessing Buy Order: ID 201, Price 105.0, Qty 60..." << std::endl;
-    market.processIncomingOrder(buy1);
-
-    // 4. Verify Results
-    std::cout << "\n--- Results ---" << std::endl;
-    std::cout << "Remaining Orders in Book: " << market.getOrdersSize() << std::endl;
-    
-    // Check matched orders
-    auto matches = market.getMatchedOrders();
-    std::cout << "Number of Match Events: " << matches.size() << std::endl;
-
-    for (auto [id, match] : matches) {
-        std::cout << "Match ID: " << id 
-                  << " | Traded Qty: " << match.getTradedQuantity() 
-                  << " | Price: " << match.getRestingOrder().getPrice() << std::endl;
+// Helper to generate a bunch of dummy orders
+std::vector<Order> generateOrders(int count) {
+    std::vector<Order> orders;
+    for (int i = 0; i < count; ++i) {
+        // Alternates Buy/Sell, randomish prices around 100.0
+        OrderType side = (i % 2 == 0) ? OrderType::Buy : OrderType::Sell;
+        double price = (side == OrderType::Buy) ? (95.0 + (i % 10)) : (105.0 - (i % 10));
+        orders.emplace_back(i, price, 10, side);
     }
+    return orders;
+}
 
+void runBenchmark(std::string name, std::unique_ptr<IOrderBook> book, const std::vector<Order>& testData) {
+    Market market(std::move(book));
+    
+    auto start = std::chrono::high_resolution_clock::now();
+    
+    for (auto order : testData) {
+        market.processIncomingOrder(order);
+    }
+    
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    
+    std::cout << "[" << name << "] Processed " << testData.size() 
+              << " orders in " << duration.count() << " us. "
+              << "Remaining in book: " << market.getOrdersSize() << std::endl;
+}
+
+int main() {
+    const int ORDER_COUNT = 1000;
+    auto testData = generateOrders(ORDER_COUNT);
+
+    std::cout << "--- Starting OrderBook Benchmarks (" << ORDER_COUNT << " orders) ---" << std::endl;
+
+    runBenchmark("Vector Implementation", std::make_unique<VectorOrderBook>(), testData);
+    runBenchmark("List Implementation", std::make_unique<ListOrderBook>(), testData);
+    runBenchmark("Multimap Implementation", std::make_unique<MultimapOrderBook>(), testData);
+    // runBenchmark("Priority Queue Implementation", std::make_unique<PriorityQueueOrderBook>, testData);
+
+    std::cout << "\nPress Enter to exit..." << std::endl;
+    std::cin.get(); // Waits for a key press
     return 0;
 }
